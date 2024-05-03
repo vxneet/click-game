@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <title>Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-row">
+            <p class="txt">High Score : <span id="highScore">0</span></p>
+            <p class="txt">Time Remaining : <span id="timer">10</span> seconds</p>
+        </div>
+        <div class="center-row">
+            <p class="txt">Score : <span id="score">0</span></p>
+            <button class="click" onclick="addToscore(1)">Click</button>
+        </div>
+    </div>
+    <script>
+        var score = 0;
+        var timeRemaining = 10;
+        var timerStarted = false;
+        var highScore = 0;
+
+        function addToscore(amount) {
+            score = score + amount;
+            document.getElementById('score').innerHTML = score;
+            if (score > highScore) {
+                highScore = score;
+                document.getElementById('highScore').innerHTML = highScore;
+                localStorage.setItem('highScore', highScore);
+            }
+
+            if (!timerStarted) {
+                timerStarted = true;
+                startTimer();
+            }
+        }
+
+        function updateTimer() {
+            document.getElementById('timer').innerHTML = timeRemaining;
+        }
+
+        function startTimer() {
+            var timerInterval = setInterval(function () {
+                timeRemaining--;
+                updateTimer();
+
+                if (timeRemaining === 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Your final score is " + score + ".");
+                    resetGame();
+                }
+            }, 1000);
+        }
+
+        function resetGame() {
+            score = 0;
+            timeRemaining = 10;
+            timerStarted = false;
+            document.getElementById('score').innerHTML = score;
+            document.getElementById('timer').innerHTML = timeRemaining;
+        }
+
+        window.onload = function () {
+            highScore = localStorage.getItem('highScore') || 0;
+            document.getElementById('highScore').innerHTML = highScore;
+        }
+    </script>
+</body>
+
+</html>
